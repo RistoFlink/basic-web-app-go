@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/RistoFlink/basic-web-app-go/pkg/config"
 	"github.com/RistoFlink/basic-web-app-go/pkg/handlers"
+	"github.com/RistoFlink/basic-web-app-go/pkg/render"
 )
 
 const portNumber = ":8080"
@@ -19,6 +22,14 @@ func main() {
 	//	}
 	//	fmt.Println(fmt.Sprintf("Number of bytes written was: %d", n))
 	//})
+	var app config.AppConfig
+
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("cannot create template cache")
+	}
+	app.TemplateCache = tc
+
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/about", handlers.About)
 
