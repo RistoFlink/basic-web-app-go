@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/RistoFlink/basic-web-app-go/pkg/handlers"
 )
 
 const portNumber = ":8080"
@@ -17,8 +19,8 @@ func main() {
 	//	}
 	//	fmt.Println(fmt.Sprintf("Number of bytes written was: %d", n))
 	//})
-	http.HandleFunc("/", Home)
-	http.HandleFunc("/about", About)
+	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/about", handlers.About)
 
 	fmt.Println(fmt.Sprintf("Starting the server at: %s", portNumber))
 	_ = http.ListenAndServe(portNumber, nil)
