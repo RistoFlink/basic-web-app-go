@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/RistoFlink/basic-web-app-go/pkg/config"
+	"github.com/RistoFlink/basic-web-app-go/pkg/models"
 	"github.com/RistoFlink/basic-web-app-go/pkg/render"
 )
 
@@ -29,13 +30,18 @@ func NewHandlers(r *Repository) {
 
 // in order for a function to response to a request from a browser, it needs to handle 2 parameters: ResponseWriter and Request
 // in Go it is a custom to begin comments with the name of the function
+
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 
 }
 
 // About is the handler for the about page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+	// perform business logic
+	stringMap := make(map[string]string)
+	stringMap["test"] = "Hello, again."
+	// send the data to the template
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }

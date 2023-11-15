@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/RistoFlink/basic-web-app-go/pkg/config"
+	"github.com/RistoFlink/basic-web-app-go/pkg/models"
 )
 
 var functions = template.FuncMap{}
@@ -18,8 +19,13 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
+// AddDefaultData adds a data to all the pages if necessary
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
+
 // RenderTemplate renders templates using "html/template"
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	// if UseCache is true -> read the information from the template cache. If not, rebuild the template cache
 	if app.UseCache {
@@ -37,7 +43,10 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 
 	buf := new(bytes.Buffer)
-	err := t.Execute(buf, nil)
+
+	td = AddDefaultData(td)
+
+	err := t.Execute(buf, td)
 	if err != nil {
 		log.Println(err)
 	}
