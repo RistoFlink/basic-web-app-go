@@ -27,14 +27,14 @@ func AddDefaultData(td *models.TemplateData) *models.TemplateData {
 // RenderTemplate renders templates using "html/template"
 func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
+	// create a template cache
+	// get the template cache from the app config
 	// if UseCache is true -> read the information from the template cache. If not, rebuild the template cache
 	if app.UseCache {
 		tc = app.TemplateCache
 	} else {
 		tc, _ = CreateTemplateCache()
 	}
-	// create a template cache
-	// get the template cache from the app config
 
 	// get requested template from cache
 	t, ok := tc[tmpl]
