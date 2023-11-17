@@ -4,13 +4,19 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/RistoFlink/basic-web-app-go/pkg/config"
 	"github.com/RistoFlink/basic-web-app-go/pkg/handlers"
 	"github.com/RistoFlink/basic-web-app-go/pkg/render"
+	"github.com/alexedwards/scs/v2"
 )
 
 const portNumber = ":8080"
+
+var app config.AppConfig
+
+var session *scs.SessionManager
 
 // main is the main application function
 func main() {
@@ -22,7 +28,17 @@ func main() {
 	//	}
 	//	fmt.Println(fmt.Sprintf("Number of bytes written was: %d", n))
 	//})
-	var app config.AppConfig
+
+	// change this to true when in production
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
